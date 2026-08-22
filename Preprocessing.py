@@ -125,4 +125,4 @@ def scATAC_seq(dfATAC, RNACellBarcodes, RNATensor):
 
     print("ATAC dataset preprocessing completed!\n")
 
-    return ATACCellBarcodes, ATACChromatinRegions, ATACTensor, RNACellBarcodes, RNATensor# ==== 1. Preprocess scRNA-seq dataset =====
+    return ATACCellBarcodes, ATACChromatinRegions, ATACTensor, RNACellBarcodes, RNATensor
