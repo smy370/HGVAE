@@ -16,4 +16,7 @@ HGVAE.py            Model architecture definition and execution pipeline
 ```
 
 # Installation
-pip install torch==1.13.1+cu116 numpy==1.26.4 pandas==2.2.3 scikit-learn==1.5.2
+pip install torch==2.0.0+cu118
+pip install pandas==2.3.3
+pip install numpy==1.26.4
+pip install scikit-learn==1.7.2
