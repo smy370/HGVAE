@@ -15,8 +15,15 @@ Preprocessing.py    Data preprocessing module
 HGVAE.py            Model architecture definition and execution pipeline
 ```
 
-# Installation
+# Environment
+## Software
 pip install torch==2.0.0+cu118
 pip install pandas==2.3.3
 pip install numpy==1.26.4
 pip install scikit-learn==1.7.2
+## Hardware
+- GPU: NVIDIA A800 80GB (TCC mode)
+- NVIDIA Driver Version: 529.19
+- Driver-supported CUDA Version: 12.0
+- 
+> Note: The CUDA version shown here is the maximum CUDA version supported by the GPU driver, not the CUDA runtime version used by PyTorch.
