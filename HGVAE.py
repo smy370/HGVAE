@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.metrics import adjusted_rand_score
 import gc
 import random
+from tqdm import tqdm
 
 # Automatically select GPU or CPU
 Device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -428,7 +429,7 @@ def CalAdjustRandScore(TrueClusterLabels, PreClusterLabels):
 
 # =========================================== 9. Training Function ==================================================
 def ModelTrain(X, RNACellBarcodes, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, ATACEdgeWeight, Epochs=800, seed=2184):
-
+    SetSeed(seed)
     # step 1: Model initialization - instantiate improved model and transfer to GPU
     ModelInst = Model(X.size(1), 2048, 1024, NumHeads=16, dropout=0.4).to(Device)
 
@@ -441,12 +442,10 @@ def ModelTrain(X, RNACellBarcodes, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, A
     # step 4： Load ground-truth cluster labels
     TrueClusterLabels = GetTrueClusterLabels("Human_PBMC3k/Clusters.csv", RNACellBarcodes)
 
-    # step 5： Main training loop
-    BestARI = 0  # Record the best ARI score
-
-    print("Training...")
-    for Epoch in range(1, Epochs + 1):
-
+   # step 5： Main iteration loop
+    print("Iterating...")
+    for Epoch in tqdm(range(1, Epochs + 1), total=Epochs, ncols=100):
+        SetSeed(seed)
         # Switch to training mode
         ModelInst.train()
 
@@ -471,39 +470,14 @@ def ModelTrain(X, RNACellBarcodes, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, A
         # Update learning rate
         Scheduler.step()
 
-        # === Evaluation phase ===
-        ModelInst.eval()
-        with torch.no_grad():
-            Z_eval, Mu_eval, Out_eval, LogVar_eval = ModelInst.forward(X, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, ATACEdgeWeight)  # Evaluate on original data
-            PreClusterLabels = KMeansPlusPlus(Mu_eval, 12, tol=1e-4, seed=seed)  # Perform clustering on latent embeddings
-            ARI = CalAdjustRandScore(TrueClusterLabels, PreClusterLabels)  # Calculate Adjusted Rand Index to evaluate clustering performance
+    # === Evaluation phase ===
+    ModelInst.eval()
+    with torch.no_grad():
+        Z_eval, Mu_eval, Out_eval, LogVar_eval = ModelInst.forward(X, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, ATACEdgeWeight)  # Evaluate on original data
+        PreClusterLabels = KMeansPlusPlus(Mu_eval, 12, tol=1e-4, seed=seed)  # Perform clustering on latent embeddings
+        ARI = CalAdjustRandScore(TrueClusterLabels, PreClusterLabels)  # Calculate Adjusted Rand Index to evaluate clustering performance
 
-            # Update best ARI
-            if ARI > BestARI:
-                BestARI = ARI  # Refresh best ARI
-                torch.save({'epoch': Epoch,
-                                'model_state_dict': ModelInst.state_dict(),
-                                'optimizer_state_dict': Optimizer.state_dict(),
-                                'BestAri': BestARI},
-                             'best_model.pth')  # Save checkpoint of the best model
-
-            # Release evaluation tensors
-            del Z_eval, Out_eval, LogVar_eval, Mu_eval, PreClusterLabels
-            FreeMemory()
-
-        print(f'Epoch {Epoch:3d} | '
-              f'TotalLoss={TotalLoss.item():.4f} | '
-              f'RNAAMRLoss={RNAAMRLoss.item():.4f} | '
-              f'ATACAMRLoss={ATACAMRLoss.item():.4f} | '
-              f'KLLoss={Klloss.item():.4f} | '
-              f'ARI={ARI:.4f} | '
-              f'Best ARI={BestARI:.4f} | '
-              f'LR=1.00e-4')
-
-    # After training, load weights of the best model
-    Checkpoint = torch.load('best_model.pth')
-    ModelInst.load_state_dict(Checkpoint['model_state_dict'])
-    print(f"Training completed! Best ARI: {BestARI:.4f}\n")
+    print(f"All iterations completed! ARI: {ARI:.4f}\n")
 
 
 # === 10. free memory ===
