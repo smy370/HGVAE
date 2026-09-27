@@ -476,6 +476,8 @@ def ModelTrain(X, RNACellBarcodes, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, A
         Z_eval, Mu_eval, Out_eval, LogVar_eval = ModelInst.forward(X, RNAEdgeIndex, RNAEdgeWeight, ATACEdgeIndex, ATACEdgeWeight)  # Evaluate on original data
         PreClusterLabels = KMeansPlusPlus(Mu_eval, 12, tol=1e-4, seed=seed)  # Perform clustering on latent embeddings
         ARI = CalAdjustRandScore(TrueClusterLabels, PreClusterLabels)  # Calculate Adjusted Rand Index to evaluate clustering performance
+        del Z_eval, Mu_eval, Out_eval, LogVar_eval, PreClusterLabels
+        FreeMemory()
 
     print(f"All iterations completed! ARI: {ARI:.4f}\n")
 
