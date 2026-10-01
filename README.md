@@ -13,6 +13,11 @@ Official implementation of HGVAE for single-cell multi-omics integration
 main.py             Main execution file (entry script)
 Preprocessing.py    Data preprocessing module
 HGVAE.py            Model architecture definition and execution pipeline
+
+Clusters.csv        True Cluster Labels for PBMC3K
+PreClusters.csv     Predicted Cluster Labels for PBMC3K
+
+the associated dataset used in this study can be accessed at https://zenodo.org/records/21992226
 ```
 
 # Environment
