@@ -19,13 +19,13 @@ torch.use_deterministic_algorithms(True)
 if __name__ == '__main__':
 
     # step 1: Load data starting from Row 1, Column 1 of RNA CSV file
-    dfRNA = pd.read_csv('Human_PBMC3k/RNA_Counts.csv')
+    dfRNA = pd.read_csv('Human_PBMC3k/RNA_Gene_Expression_Matrix.csv')
 
     # step 2: Preprocess RNA dataset
     RNACellBarcodes, RNAGeneNames, RNATensor = Preprocessing.scRNA_seq(dfRNA)
 
     # step 3: Load data starting from Row 1, Column 1 of ATAC CSV file
-    dfATAC = pd.read_csv('Human_PBMC3k/Atac_Activity_Matrix.csv')
+    dfATAC = pd.read_csv('Human_PBMC3k/ATAC_Activity_Score_Matrix.csv')
 
     # step 4: Preprocess ATAC dataset
     ATACCellBarcodes, ATACChromatinRegions, ATACTensor, RNACellBarcodes, RNATensor = Preprocessing.scATAC_seq(dfATAC, RNACellBarcodes, RNATensor)
