@@ -17,7 +17,7 @@ HGVAE.py            Model architecture definition and execution pipeline
 Clusters.csv        True Cluster Labels for PBMC3K
 PreClusters.csv     Predicted Cluster Labels for PBMC3K
 
-The PBMC3K RNA and ATAC datasets used in this study can be downloaded from the Release assets: [Release link to be added later]
+The PBMC3K RNA and ATAC datasets used in this study can be downloaded from the Release assets: https://github.com/smy370/HGVAE/releases/tag/v1.0
 ```
 
 # Environment
