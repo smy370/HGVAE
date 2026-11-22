@@ -1,7 +1,7 @@
 # HGVAE
 Official implementation of HGVAE for single-cell multi-omics integration
 
-# A Hierarchical Graph Variational Autoencoder-Based Model for Multimodal Single-Cell Data Integration and Deciphering Cellular Heterogeneityn
+# HGVAE: A Hierarchical Graph Variational Autoencoder for Multimodal Single-Cell Integration and Deciphering Cellular Heterogeneity
 
 # Overview
 &nbsp;&nbsp;&nbsp;&nbsp;Single-cell multi-omics technologies enable the simultaneous profiling of cellular transcriptional states and chromatin accessibility, providing powerful approaches for characterizing cell types, gene regulatory mechanisms, and complex biological processes. However, RNA-seq and ATAC-seq data exhibit substantial modality heterogeneity, with distinct distribution patterns while containing complementary biological information. Effectively integrating multimodal features and learning biologically meaningful cellular representations remains a critical challenge.<br>
